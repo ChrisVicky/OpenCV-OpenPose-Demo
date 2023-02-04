@@ -43,3 +43,42 @@ make
 ./run
 ```
 
+## Configurations
+* File `default.xml`
+
+```
+<?xml version="1.0"?>
+<opencv_storage>
+	<Settings>
+
+		<!-- specify what kind of model was trained. It could be (COCO, BODY_25) depends on dataset. -->
+		<dataset>BODY_25</dataset>
+		<!-- model configuration, e.g. hand/pose.prototxt -->
+		<modelTxt>./pose/body_25/pose_deploy.prototxt</modelTxt>
+		<!-- model weights, e.g. hand/pose_iter_102000.caffemodel -->
+		<modelBin>./pose/body_25/pose_iter_584000.caffemodel</modelBin>
+
+		<!-- Preprocess input image by resizing to a specific widh. -->
+		<W_in>368</W_in>
+		<!-- Preprocess input image by resizing to a specific height. -->
+		<H_in>368</H_in>
+
+		<!-- threshold or confidence value for the heatmap -->
+		<thresh>0.07</thresh>
+		<!-- scale for blob -->
+		<scale>0.003922</scale>
+
+		<logPath>log.log</logPath>
+
+		<!-- Could be (CPU, GPU) depends on devices and OpenCV Versions -->
+		<device>CPU</device>
+
+		<!-- "0" = Use Camera -->
+		<!-- <imageFile>"0"</imageFile> -->
+		<!-- "*.png/jpg .etc" = Use Images -->
+		<imageFile>./group.jpg</imageFile>
+
+	</Settings>
+</opencv_storage>
+```
+
