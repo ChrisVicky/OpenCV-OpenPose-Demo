@@ -21,7 +21,9 @@
 
 		<logPath>log.log</logPath>
 
+		<!-- Could be (CPU, GPU) depends on devices and OpenCV Versions -->
 		<device>CPU</device>
+
 		<!-- "0" = Use Camera -->
 		<!-- <imageFile>"0"</imageFile> -->
 		<!-- "*.png/jpg .etc" = Use Images -->
