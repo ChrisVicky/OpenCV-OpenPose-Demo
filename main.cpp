@@ -38,6 +38,10 @@
 #include "./include/settings.hpp"
 
 #include<iostream>
+#include<chrono>
+#include<ctime>
+#include <opencv4/opencv2/core/operations.hpp>
+#include <opencv4/opencv2/imgproc.hpp>
 
 Settings s;
 
@@ -81,18 +85,33 @@ int main(int argc, char *argv[]){
 
 	cv::Mat input;
 	cv::Mat show;
+
 	if(s.isCamera){
 		cv::VideoCapture cap(0);
 		bool LOOP = true;
+		int total_frame = 0;
+		auto start = std::chrono::system_clock::now();
 		while(LOOP){
 			cap >> input;
+
 			show = forwardNet(input, s);
+
+			/* fps stuff */
+			total_frame ++;
+			auto current = std::chrono::system_clock::now();
+			std::chrono::duration<double> dur = current - start;
+			double seconds = dur.count();
+			double fps = ((double) total_frame) / seconds;
+
 			cv::putText(show, "Press 'q' to Exit", cv::Point(50,50), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
+			cv::putText(show, cv::format("FPS: %.4f",fps), cv::Point(50,100), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
+
 			imshow("Results", show);
 			char key = cv::waitKey(1);
 			if(key == 'q'){
 				LOOP = false;
 			}
+
 		}
 	}else{
 		input = cv::imread(s.imageFile, cv::IMREAD_COLOR);
