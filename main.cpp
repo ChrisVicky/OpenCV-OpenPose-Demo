@@ -110,25 +110,31 @@ int main(int argc, char *argv[]){
 			int frame_width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
 			int frame_height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
 			double fps = cap.get(cv::CAP_PROP_FPS);
+			int TotalFrame = cap.get(cv::CAP_PROP_FRAME_COUNT);
 
 			cv::VideoWriter writer(s.outputPath, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), fps, cv::Size(frame_width, frame_height));
 			bool LOOP = true;
-			int total_frame = 0;
+			int current_frame = 0;
 			auto start = std::chrono::system_clock::now();
 			while(LOOP){
 				cap >> input;
+				if(input.empty()){
+					LOG_F(INFO, "Reach the EOF");
+					break;
+				}
 				show = forwardNet(input, s);
 				/* fps stuff */
-				total_frame ++;
+				current_frame ++;
 				auto current = std::chrono::system_clock::now();
 				std::chrono::duration<double> dur = current - start;
 				double seconds = dur.count();
-				double fps = ((double) total_frame) / seconds;
-				cv::putText(show, "Press 'q' to Exit", cv::Point(50,50), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
-				cv::putText(show, cv::format("FPS: %.4f",fps), cv::Point(50,100), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
+				double fps = ((double) current_frame) / seconds;
+				cv::putText(show, "Press 'q' to Exit", cv::Point(50,50), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.0, cv::Scalar(255,255,255), 2);
+				cv::putText(show, cv::format("FPS: %.4f",fps), cv::Point(50,100), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.0, cv::Scalar(255,255,255), 2);
 				imshow("Results", show);
 				char key = cv::waitKey(1);
 				writer.write(show);
+				LOG_F(INFO, "Frame: %-4d/%d | fps:%.4f ",current_frame,TotalFrame,fps);
 				if(key == 'q'){
 					LOOP = false;
 				}
