@@ -1,6 +1,6 @@
 # OpenPose-OpenCV Demo
 
-
+* 使用 OpenCV `cv::dnn` 模块调用 OpenPose 模型进行人体骨架识别。（可通过调整 `.xml` 文件来修改外部设置）。
 * An encapsulation that demonstrates the usage of OpenCV **`cv::dnn`** on **OpenPOSE** to detect **Multiple** Human Pose.
 
 ![run-cpu](./img/run-cpu.png)
