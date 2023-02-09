@@ -114,10 +114,11 @@ int main(int argc, char *argv[]){
 
 		}
 	}else{
+		LOG_F(INFO, "Image: %s",s.imageFile.c_str());
 		input = cv::imread(s.imageFile, cv::IMREAD_COLOR);
 		show = forwardNet(input,s);
 		imshow("Results", show);
-    imwrite("Result.png", show);
+		imwrite("Result.png", show);
 		cv::waitKey();
 	}
 	return 0;

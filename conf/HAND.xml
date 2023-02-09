@@ -2,11 +2,14 @@
 <opencv_storage>
 	<Settings>
 
-		<!-- specify what kind of model was trained. It could be (COCO, BODY_25) depends on dataset. -->
-		<dataset>BODY_25</dataset>
+		<!-- specify what kind of model was trained. It could be (COCO, BODY_25, HAND) depends on dataset. -->
+		<!-- <dataset>HAND</dataset> -->
 		<!-- model configuration, e.g. hand/pose.prototxt -->
-		<modelTxt>./models/body_25/pose_deploy.prototxt</modelTxt>
+		<!-- <modelTxt>./models/hand/pose_deploy.prototxt</modelTxt> -->
 		<!-- model weights, e.g. hand/pose_iter_102000.caffemodel -->
+		<!-- <modelBin>./models/hand/pose_iter_102000.caffemodel</modelBin> -->
+		<dataset>BODY_25</dataset>
+		<modelTxt>./models/body_25/pose_deploy.prototxt</modelTxt>
 		<modelBin>./models/body_25/pose_iter_584000.caffemodel</modelBin>
 
 		<!-- Preprocess input image by resizing to a specific widh. -->
@@ -27,7 +30,8 @@
 		<!-- "0" = Use Camera -->
 		<!-- <imageFile>"0"</imageFile> -->
 		<!-- "*.png/jpg .etc" = Use Images -->
-		<imageFile>./sources/group.jpg</imageFile>
+		<!-- <imageFile>./sources/The_Pianist_movie.jpg</imageFile> -->
+		<imageFile>./group.jpg</imageFile>
 
 	</Settings>
 </opencv_storage>

@@ -3,11 +3,11 @@
 	<Settings>
 
 		<!-- specify what kind of model was trained. It could be (COCO, BODY_25) depends on dataset. -->
-		<dataset>BODY_25</dataset>
+		<dataset>COCO</dataset>
 		<!-- model configuration, e.g. hand/pose.prototxt -->
-		<modelTxt>./models/body_25/pose_deploy.prototxt</modelTxt>
+		<modelTxt>./models/coco/pose_deploy_linevec.prototxt</modelTxt>
 		<!-- model weights, e.g. hand/pose_iter_102000.caffemodel -->
-		<modelBin>./models/body_25/pose_iter_584000.caffemodel</modelBin>
+		<modelBin>./models/coco/pose_iter_440000.caffemodel</modelBin>
 
 		<!-- Preprocess input image by resizing to a specific widh. -->
 		<W_in>368</W_in>

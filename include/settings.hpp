@@ -57,8 +57,8 @@ class Settings{
 			if(logPath.empty()){
 				LOG_F(INFO, "No Log Path Specified, Log to stderr Only");
 			}else{
-	      loguru::add_file(logPath.c_str(), loguru::Truncate, loguru::Verbosity_MAX);
-			  LOG_F(INFO, "Log to File '%s'",logPath.c_str());
+				loguru::add_file(logPath.c_str(), loguru::Truncate, loguru::Verbosity_MAX);
+				LOG_F(INFO, "Log to File '%s'",logPath.c_str());
 			}
 			if(modelTxt.empty() || modelBin.empty() || dataset.empty()){
 				LOG_F(ERROR, "Model Configuration Crashed");
@@ -67,7 +67,7 @@ class Settings{
 				LOG_F(INFO, "model type: %s",dataset.c_str());
 			}
 			if(device!="CPU" && device != "GPU"){
-        LOG_F(ERROR, "Device '%s' Not Supported",device.c_str());
+				LOG_F(ERROR, "Device '%s' Not Supported",device.c_str());
 				goodInput = false;
 			}
 			/* Parameters Reference: 
@@ -130,16 +130,58 @@ class Settings{
 					{14,19},{19,20},{14,21},{11,22},{22,23}, 
 					{11,24},
 				};
+			}else if(dataset=="HAND"){
+				LOG_F(WARNING, "Hand Model is yet finished, Try other models");
+				/* Reference: OpenPose PoseParameters */
+				/* https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/src/openpose/pose/poseParameters.cpp#L175 */
+				nPoints = 42;
+				keypointsMapping = {
+					// Left hand
+					"LThumb0",
+					"LThumb1CMC",       "LThumb2Knuckles", "LThumb3IP",   "LThumb4FingerTip",
+					"LIndex1Knuckles",  "LIndex2PIP",      "LIndex3DIP",  "LIndex4FingerTip",
+					"LMiddle1Knuckles", "LMiddle2PIP",      "LMiddle3DIP", "LMiddle4FingerTip",
+					"LRing1Knuckles",   "LRing2PIP",       "LRing3DIP",   "LRing4FingerTip",
+					"LPinky1Knuckles",  "LPinky2PIP",      "LPinky3DIP",  "LPinky4FingerTip",
+					// Right hand
+					"RThumb0",
+					"RThumb1CMC",       "RThumb2Knuckles", "RThumb3IP",   "RThumb4FingerTip",
+					"RIndex1Knuckles",  "RIndex2PIP",      "RIndex3DIP",  "RIndex4FingerTip",
+					"RMiddle1Knuckles", "RMiddle2PIP",     "RMiddle3DIP", "RMiddle4FingerTip",
+					"RRing1Knuckles",   "RRing2PIP",       "RRing3DIP",   "RRing4FingerTip",
+					"RPinky1Knuckles",  "RPinky2PIP",      "RPinky3DIP",  "RPinky4FingerTip",
+				};
+				mapIdx = {
+					// Left Hand
+					{43,44},{45,46},{47,48},{49,50},    {51,52},{53,54},{55,56},{57,58},
+					{59,60},{61,62},{63,64},{65,66},    {67,68},{69,70},{71,72},{73,74},
+					{75,76},{77,78},{79,80},{81,82},
+					// Right Hand
+					{83,84},{85,86},{87,88},{89,90},    {91,92},{93,94},{95,96},{97,98},
+					{99,100},{101,102},{103,104},{105,106},     {107,108},{109,110},{111,112},{113,114},
+					{115,116},{117,118},{119,120},{121,122},
+				};
+				posePairs = {
+					// Left Hand
+					{0, 1}, {1, 2}, {2, 3}, {3, 4},   {0, 5}, {5, 6}, {6, 7}, {7, 8},
+					{0, 9}, {9,10}, {10,11}, {11,12},   {0,13}, {13,14}, {14,15}, {15,16},
+					{0,17}, {17,18}, {18,19}, {19,20},  
+					// Right Hand
+					{21,22}, {22,23}, {23,24}, {24,25},  {21,26}, {26,27}, {27,28}, {28,29},
+					{21,30}, {30,31}, {31,32}, {32,33},  {21,34}, {34,35}, {35,36}, {36,37},
+					{21,38}, {38,39}, {39,40}, {40,41},
+				};
+				goodInput = false;
 			}else{
-        LOG_F(ERROR, "Model Type '%s' Not Supported",dataset.c_str());
+				LOG_F(ERROR, "Model Type '%s' Not Supported",dataset.c_str());
 				goodInput = false;
 			}
 
 			if(imageFile=="0"){
-        LOG_F(INFO, "Use Camera");
+				LOG_F(INFO, "Use Camera");
 				isCamera = true;
 			}else{
-        LOG_F(INFO, "Use Image");
+				LOG_F(INFO, "Use Image");
 				isCamera = false;
 			}
 		}

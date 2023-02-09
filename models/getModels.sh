@@ -1,8 +1,7 @@
 # ------------------------- BODY, FOOT, FACE, AND HAND MODELS -------------------------
 # Downloading body pose (COCO and MPI), face and hand models
 OPENPOSE_URL="http://posefs1.perception.cs.cmu.edu/OpenPose/models/"
-POSE_FOLDER="pose/"
-FACE_FOLDER="face/"
+POSE_FOLDER="./"
 HAND_FOLDER="hand/"
 
 # ------------------------- POSE (BODY+FOOT) MODELS -------------------------
@@ -19,4 +18,9 @@ wget -c ${OPENPOSE_URL}${COCO_MODEL} -P ${COCO_FOLDER}
 # if [ ! -f $COCO_MODEL ]; then
 #     wget ${OPENPOSE_URL}$COCO_MODEL -P $COCO_FOLDER
 # fi
+
+# "------------------------- HAND MODELS -------------------------"
+# Hand
+HAND_MODEL=$HAND_FOLDER"pose_iter_102000.caffemodel"
+wget -c ${OPENPOSE_URL}${HAND_MODEL} -P ${HAND_FOLDER}
 
