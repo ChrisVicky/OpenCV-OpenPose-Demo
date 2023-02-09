@@ -24,10 +24,15 @@
 		<!-- Could be (CPU, GPU) depends on devices and OpenCV Versions -->
 		<device>CPU</device>
 
-		<!-- "0" = Use Camera -->
-		<!-- <imageFile>"0"</imageFile> -->
+		<!-- Could be (CAM, IMAGE, VIDEO) -->
+		<inputType>IMAGE</inputType>
+
 		<!-- "*.png/jpg .etc" = Use Images -->
-		<imageFile>./group.jpg</imageFile>
+		<imageFile>./sources/group.jpg</imageFile>
+
+		<!-- OutputPath is Necessary -->
+		<videoFile>./sources/cxk.mp4</videoFile>
+		<outputPath>./output.mp4</outputPath>
 
 	</Settings>
 </opencv_storage>

@@ -112,8 +112,8 @@ void splitNetOutputBlobToParts(cv::Mat& netOutputBlob,const cv::Size& targetSize
 	for(int i = 0; i< nParts;++i){
 		cv::Mat part(h, w, CV_32F, netOutputBlob.ptr(0,i));
 
-		cv::imshow(cv::format("HeatMap %d", i), part);
-		cv::waitKey();
+		// cv::imshow(cv::format("HeatMap %d", i), part);
+		// cv::waitKey();
 		cv::Mat resizedPart;
 
 		cv::resize(part,resizedPart,targetSize);

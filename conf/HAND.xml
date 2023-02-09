@@ -3,14 +3,11 @@
 	<Settings>
 
 		<!-- specify what kind of model was trained. It could be (COCO, BODY_25, HAND) depends on dataset. -->
-		<!-- <dataset>HAND</dataset> -->
+		<dataset>HAND</dataset> 
 		<!-- model configuration, e.g. hand/pose.prototxt -->
-		<!-- <modelTxt>./models/hand/pose_deploy.prototxt</modelTxt> -->
+		<modelTxt>./models/hand/pose_deploy.prototxt</modelTxt> 
 		<!-- model weights, e.g. hand/pose_iter_102000.caffemodel -->
-		<!-- <modelBin>./models/hand/pose_iter_102000.caffemodel</modelBin> -->
-		<dataset>BODY_25</dataset>
-		<modelTxt>./models/body_25/pose_deploy.prototxt</modelTxt>
-		<modelBin>./models/body_25/pose_iter_584000.caffemodel</modelBin>
+		<modelBin>./models/hand/pose_iter_102000.caffemodel</modelBin>
 
 		<!-- Preprocess input image by resizing to a specific widh. -->
 		<W_in>368</W_in>
@@ -27,11 +24,14 @@
 		<!-- Could be (CPU, GPU) depends on devices and OpenCV Versions -->
 		<device>CPU</device>
 
-		<!-- "0" = Use Camera -->
-		<!-- <imageFile>"0"</imageFile> -->
-		<!-- "*.png/jpg .etc" = Use Images -->
-		<!-- <imageFile>./sources/The_Pianist_movie.jpg</imageFile> -->
-		<imageFile>./group.jpg</imageFile>
+		<!-- Could be (CAM, IMAGE, VIDEO) -->
+		<inputType>IMAGE</inputType>
 
+		<!-- "*.png/jpg .etc" = Use Images -->
+		<imageFile>./sources/The_Pianist_movie.jpg</imageFile>
+
+		<!-- OutputPath is Necessary -->
+		<videoFile>./sources/cxk.mp4</videoFile>
+		<outputPath>./output.mp4</outputPath>
 	</Settings>
 </opencv_storage>

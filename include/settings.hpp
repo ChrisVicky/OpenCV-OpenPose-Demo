@@ -11,6 +11,12 @@
 #include <opencv4/opencv2/core/persistence.hpp> 
 #include <opencv2/core/types.hpp>
 
+enum inputtype{
+	CAM=0,
+	VIDEO,
+	IMAGE
+};
+
 class Settings{
 	public:
 		// Default is an Error Input
@@ -19,8 +25,12 @@ class Settings{
 			fs << "{";
 			fs << "modelTxt" << modelTxt;
 			fs << "modelBin" << modelBin;
-			fs << "imageFile" << imageFile;
 			fs << "dataset" << dataset;
+
+			fs << "inputType" << inputType;
+			fs << "imageFile" << imageFile;
+			fs << "videoFile" << videoFile;
+			fs << "outputPath" << outputPath;
 
 			fs << "W_in" << W_in;
 			fs << "H_in" << H_in;
@@ -34,10 +44,14 @@ class Settings{
 		}
 		void read(const cv::FileNode& node){
 			// Calibration
+			node["dataset"] >> dataset;
 			node["modelTxt"] >> modelTxt;
 			node["modelBin"] >> modelBin;
+
+			node["inputType"] >> inputType;
 			node["imageFile"] >> imageFile;
-			node["dataset"] >> dataset;
+			node["videoFile"] >> videoFile;
+			node["outputPath"] >> outputPath;
 
 			node["W_in"] >> W_in;
 			node["H_in"] >> H_in;
@@ -176,21 +190,36 @@ class Settings{
 				LOG_F(ERROR, "Model Type '%s' Not Supported",dataset.c_str());
 				goodInput = false;
 			}
-
-			if(imageFile=="0"){
-				LOG_F(INFO, "Use Camera");
-				isCamera = true;
+			if(inputType=="VIDEO"){
+				if(videoFile.empty() || outputPath.empty()){
+					LOG_F(ERROR, "Input Type '%s' but VideoFile '%s' or outputPath '%s' is invalid", inputType.c_str(), videoFile.c_str(), outputPath.c_str());
+					goodInput = false;
+				}
+				type=VIDEO;
+			}else if(inputType=="CAM"){
+				type=CAM;
+			}else if(inputType=="IMAGE"){
+				if(imageFile.empty()){
+					LOG_F(ERROR, "Input Type '%s' but VideoFile '%s' is invalid", inputType.c_str(), imageFile.c_str());
+					goodInput = false;
+				}
+				type=IMAGE;
 			}else{
-				LOG_F(INFO, "Use Image");
-				isCamera = false;
+				LOG_F(ERROR, "Input Type '%s' not Valid (valid: CAM, VIDEO, IMAGE)",inputType.c_str());
+				goodInput = false;
 			}
+
 		}
 
 	public:
 		std::string modelTxt;    // model configuration, e.g. hand/pose.prototxt 
 		std::string modelBin;    // model weights, e.g. hand/pose_iter_102000.caffemodel 
 
+		std::string inputType;  	// Type: (CAM, VIDEO, IMAGE)
 		std::string imageFile;   // path to image file (containing a single person, or hand) 
+					 
+		std::string videoFile;
+		std::string outputPath;
 
 		std::string device; 	 	// CPU or GPU
 		std::string dataset;     // specify what kind of model was trained. It could be (COCO, MPI, HAND) depends on dataset.
@@ -202,7 +231,7 @@ class Settings{
 		float scale;        // scale for blob 
 
 		bool goodInput;     // true if all inputs are valid
-		bool isCamera;
+		int type; 		// InputType
 
 		std::string logPath;  // Log Output Path (loguru)
 

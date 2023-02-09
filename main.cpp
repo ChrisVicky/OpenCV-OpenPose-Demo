@@ -42,6 +42,7 @@
 #include<ctime>
 #include <opencv4/opencv2/core/operations.hpp>
 #include <opencv4/opencv2/imgproc.hpp>
+#include <opencv4/opencv2/videoio.hpp>
 
 Settings s;
 
@@ -86,40 +87,55 @@ int main(int argc, char *argv[]){
 	cv::Mat input;
 	cv::Mat show;
 
-	if(s.isCamera){
-		cv::VideoCapture cap(0);
-		bool LOOP = true;
-		int total_frame = 0;
-		auto start = std::chrono::system_clock::now();
-		while(LOOP){
-			cap >> input;
-
-			show = forwardNet(input, s);
-
-			/* fps stuff */
-			total_frame ++;
-			auto current = std::chrono::system_clock::now();
-			std::chrono::duration<double> dur = current - start;
-			double seconds = dur.count();
-			double fps = ((double) total_frame) / seconds;
-
-			cv::putText(show, "Press 'q' to Exit", cv::Point(50,50), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
-			cv::putText(show, cv::format("FPS: %.4f",fps), cv::Point(50,100), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
-
+	switch (s.type) {
+		case IMAGE:
+			LOG_F(INFO, "Image: %s",s.imageFile.c_str());
+			input = cv::imread(s.imageFile, cv::IMREAD_COLOR);
+			show = forwardNet(input,s);
 			imshow("Results", show);
-			char key = cv::waitKey(1);
-			if(key == 'q'){
-				LOOP = false;
+			imwrite("Result.png", show);
+			cv::waitKey();
+			break;
+		default:
+			cv::VideoCapture cap;
+			if(s.type==CAM){
+				cap = cv::VideoCapture(0);
+			}else{
+				cap = cv::VideoCapture(s.videoFile);
 			}
+			if(!cap.isOpened()){
+				LOG_F(ERROR, "Cam Not Open");
+				exit(-1);
+			}
+			int frame_width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+			int frame_height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+			double fps = cap.get(cv::CAP_PROP_FPS);
 
-		}
-	}else{
-		LOG_F(INFO, "Image: %s",s.imageFile.c_str());
-		input = cv::imread(s.imageFile, cv::IMREAD_COLOR);
-		show = forwardNet(input,s);
-		imshow("Results", show);
-		imwrite("Result.png", show);
-		cv::waitKey();
+			cv::VideoWriter writer(s.outputPath, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), fps, cv::Size(frame_width, frame_height));
+			bool LOOP = true;
+			int total_frame = 0;
+			auto start = std::chrono::system_clock::now();
+			while(LOOP){
+				cap >> input;
+				show = forwardNet(input, s);
+				/* fps stuff */
+				total_frame ++;
+				auto current = std::chrono::system_clock::now();
+				std::chrono::duration<double> dur = current - start;
+				double seconds = dur.count();
+				double fps = ((double) total_frame) / seconds;
+				cv::putText(show, "Press 'q' to Exit", cv::Point(50,50), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
+				cv::putText(show, cv::format("FPS: %.4f",fps), cv::Point(50,100), cv::FONT_HERSHEY_COMPLEX_SMALL, 2.0, cv::Scalar(255,255,255), 2);
+				imshow("Results", show);
+				char key = cv::waitKey(1);
+				writer.write(show);
+				if(key == 'q'){
+					LOOP = false;
+				}
+			}
+			writer.release();
+			cap.release();
+			break;
 	}
 	return 0;
 }
