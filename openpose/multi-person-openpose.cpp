@@ -335,11 +335,11 @@ cv::dnn::Net initNet(Settings s){
  * @return  	cv::Mat
  */
 cv::Mat forwardNet(cv::Mat input, Settings s){
-	LOG_F(INFO, ">>>>>>>>>>>>>>>>>>>> Network START");
+	LOG_F(1, ">>>>>>>>>>>>>>>>>>>> Network START");
 
 	cv::Mat inputBlob = cv::dnn::blobFromImage(input, s.scale, cv::Size((int)((double)s.W_in*(double)input.cols/(double)input.rows), s.H_in), cv::Scalar(0, 0, 0), false, false);
 
-	LOG_F(INFO, "%d x %d",input.cols, input.rows);
+	LOG_F(1, "%d x %d",input.cols, input.rows);
 
 	net.setInput(inputBlob);
 	LOG_F(1, "Input Prepared");
@@ -350,7 +350,7 @@ cv::Mat forwardNet(cv::Mat input, Settings s){
 	std::vector<cv::Mat> netOutputParts;
 	splitNetOutputBlobToParts(netOutputBlob,cv::Size(input.cols,input.rows),netOutputParts);
 	LOG_F(1, "Output Split Completed");
-	LOG_F(INFO, "OUTPUT SIZE: %ld",netOutputParts.size());
+	LOG_F(1, "OUTPUT SIZE: %ld",netOutputParts.size());
 
 	int keyPointId = 0;
 	std::vector<std::vector<KeyPoint>> detectedKeypoints;
@@ -410,7 +410,7 @@ cv::Mat forwardNet(cv::Mat input, Settings s){
 		}
 	}
 	LOG_F(1, "Output Frame Drawn");
-	LOG_F(INFO, "<<<<<<<<<<<<<<<<<<<< Network Finished");
+	LOG_F(1, "<<<<<<<<<<<<<<<<<<<< Network Finished");
 
 	return outputFrame;
 }
